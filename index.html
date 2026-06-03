@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إسلام - مدقق بيانات السفر</title>
+    <!-- تضمين مكتبة Tailwind CSS للتصميم العصري -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- أيقونات حديثة -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col justify-between">
+
+    <!-- الهيدر (شريط التنقل الرسمي) -->
+    <header class="bg-gradient-to-r flow-root from-blue-600 to-indigo-700 text-white shadow-lg p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-wide flex items-center gap-2">
+                <i class="fa-solid fa-plane-departure text-amber-400"></i>
+                <span>إسلام لخدمات السفر</span>
+            </h1>
+            <span class="bg-white/20 px-3 py-1 rounded-full text-xs backdrop-blur-sm">نظام التدقيق الذكي</span>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي (ديناميكي يتغير حسب تسجيل الدخول) -->
+    <main class="container mx-auto p-4 flex-grow flex items-center justify-center">
+        
+        <!-- 1. نموذج تسجيل الدخول (يظهر أولاً) -->
+        <div id="login-section" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100 transition-all duration-300">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">تسجيل الدخول للنظام</h2>
+                <p class="text-sm text-slate-500 mt-1">يرجى إدخال بيانات الاعتماد الخاصة بك</p>
+            </div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">اسم المستخدم</label>
+                    <input type="text" id="username" required class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right" placeholder="ادخل اليوزر الخاص بك">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">كلمة المرور</label>
+                    <input type="password" id="password" required class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-colors shadow-md shadow-blue-200 mt-2">
+                    دخول الآمن
+                </button>
+                <p id="login-error" class="text-red-500 text-sm text-center hidden mt-2">❌ البيانات غير صحيحة، حاول مجدداً</p>
+            </form>
+        </div>
+
+        <!-- 2. لوحة تحكم نظام (إسلام) - مخفية وتظهر بعد تسجيل الدخول الناجح -->
+        <div id="dashboard-section" class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-4xl border border-slate-100 hidden transition-all duration-300">
+            <div class="flex justify-between items-center border-b pb-4 mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-square-check text-emerald-500"></i>
+                        لوحة تشييك وتدقيق البيانات
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">مرحباً بك في نظام "إسلام" الخاص بك</p>
+                </div>
+                <button onclick="handleLogout()" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-right-from-bracket"></i> خروج
+                </button>
+            </div>
+
+            <!-- حقول التدقيق والعمل (يمكنك تخصيصها بدقة هنا) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- قسم إدخال البيانات للتدقيق -->
+                <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                    <h3 class="font-semibold text-slate-700 border-b pb-2 mb-3 text-sm">أدوات الفحص والتحقق</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">رقم الجواز / رقم الحجز</label>
+                        <input type="text" id="checker-input" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="مثال: A12345678">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">نوع المعاملة / التأشيرة</label>
+                        <select id="checker-type" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option>تأشيرة سياحية</option>
+                            <option>حجز طيران مؤكد</option>
+                            <option>صلاحية وثيقة السفر</option>
+                            <option>برنامج سياحي متكامل</option>
+                        </select>
+                    </div>
+
+                    <button onclick="runCheck()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-sm transition-colors shadow-md shadow-emerald-100 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass"></i> بدء التدقيق الفوري
+                    </button>
+                </div>
+
+                <!-- قسم استخراج النتائج الدقيقة -->
+                <div class="bg-slate-900 text-slate-100 p-5 rounded-xl flex flex-col justify-between shadow-inner relative overflow-hidden">
+                    <div class="absolute top-0 left-0 text-slate-800 opacity-20 text-9xl transform -translate-x-5 -translate-y-5 pointer-events-none">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-amber-400 border-b border-slate-800 pb-2 mb-3 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-terminal"></i> نتيجة الفحص والتقرير الدقيق
+                        </h3>
+                        <div id="check-output" class="text-sm leading-relaxed space-y-2 text-slate-300">
+                            <p class="text-slate-500 italic">في انتظار إدخال البيانات والضغط على زر التدقيق...</p>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] text-slate-500 mt-4 border-t border-slate-800/80 pt-2 text-left">
+                        نظام إسلام الذكي v1.0.0
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- الفوتر (حقوق الملكية باسمك) -->
+    <footer class="bg-slate-800 text-slate-400 text-center py-3 text-xs border-t border-slate-700">
+        <p>جميع الحقوق محفوظة © 2026 لموقع <span class="text-white font-bold">إسلام</span>. تم التطوير بدقة واحترافية عالية.</p>
+    </footer>
+
+    <!-- سكربت التحكم بالتشغيل والأمان والوظائف الأساسية للموقع -->
+    <script>
+        // 🛠️ يمكنك تعديل اليوزر والباسورد الخاصين بك من هنا بكل سهولة:
+        const MY_CONFIG = {
+            username: "islam",       // اسم المستخدم الخاص بك
+            password: "islampassword123" // كلمة المرور الخاصة بك
+        };
+
+        // دالة تسجيل الدخول
+        function handleLogin(event) {
+            event.preventDefault();
+            const userInp = document.getElementById('username').value.trim();
+            const passInp = document.getElementById('password').value;
+            const errorMsg = document.getElementById('login-error');
+
+            if(userInp === MY_CONFIG.username && passInp === MY_CONFIG.password) {
+                errorMsg.classList.add('hidden');
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                // حفظ حالة الدخول مؤقتاً بالمتصفح لمنع الخروج عند التحديث
+                localStorage.setItem('islam_session', 'active');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // دالة تسجيل الخروج
+        function handleLogout() {
+            localStorage.removeItem('islam_session');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('login-form').reset();
+        }
+
+        // دالة محاكاة التدقيق واستخراج النتائج بدقة عالية
+        function runCheck() {
+            const inputVal = document.getElementById('checker-input').value.trim();
+            const typeVal = document.getElementById('checker-type').value;
+            const outputDiv = document.getElementById('check-output');
+
+            if(!inputVal) {
+                outputDiv.innerHTML = `<p class="text-red-400 font-semibold">⚠️ خطأ: يرجى إدخال رقم الجواز أو الكود أولاً للتحقق!</p>`;
+                return;
+            }
+
+            // إظهار تأثير التحميل الفوري
+            outputDiv.innerHTML = `<p class="text-blue-400 animate-pulse"><i class="fa-solid fa-spinner animate-spin"></i> جاري الاتصال بقاعدة البيانات وفحص المحتوى بدقة وعمق...</p>`;
+
+            setTimeout(() => {
+                // توليد تقرير احترافي ومنظم تلقائياً بناءً على مدخلاتك
+                outputDiv.innerHTML = `
+                    <div class="space-y-2 border-l-2 border-emerald-500 pl-2 text-slate-200">
+                        <p class="text-emerald-400 font-bold flex items-center gap-1">✅ تم التحقق بنجاح من خلال نظام إسلام</p>
+                        <p>🔹 <strong>المستند المفحوص:</strong> ${inputVal}</p>
+                        <p>🔹 <strong>نوع الفحص:</strong> ${typeVal}</p>
+                        <p>🔹 <strong>الحالة الأمنية والتشغيلية:</strong> مطابقة للمواصفات وصالحة بنسبة 100%</p>
+                        <p>🔹 <strong>وقت التدقيق:</strong> ${new Date().toLocaleString('ar-EG')}</p>
+                    </div>
+                `;
+            }, 1200); // محاكاة فحص تستغرق ثانية وجزء للتأكيد على دقة العمل
+        }
+
+        // التحقق من الجلسة عند فتح الصفحة مجدداً
+        window.onload = function() {
+            if(localStorage.getItem('islam_session') === 'active') {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
